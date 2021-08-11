@@ -20,6 +20,7 @@ type ConfigStruct struct {
 		MaxAccounts        int `toml:"max_accounts"`
 		PrenameMaxAccounts int `toml:"prename_max_accounts"`
 		StartAuth          int `toml:"start_auth"`
+		AuthDelay          int `toml:"auth_delay"`
 	} `toml:"accounts"`
 	Skin struct {
 		ChangeSkinOnSnipe bool   `toml:"change_skin_on_snipe"`
@@ -51,6 +52,7 @@ max_accounts = 1
 prename_max_accounts = 10
 
 start_auth = 720 # start auth 720 minutes before drop
+auth_delay = 0 # seconds to pause between auth
 
 [skin]
 change_skin_on_snipe = false

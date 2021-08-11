@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"os"
 	"strconv"
 	"sync"
@@ -48,7 +49,7 @@ func snipeCommand(targetName string, offset float64) {
 	}
 
 	if len(accounts) > 1 {
-		logWarn("Using more than 1 account is not recommended")
+		logWarn("Using more than 1 account is not recommended for normal sniping")
 	}
 
 	if targetName == "" {
@@ -76,7 +77,7 @@ func snipeCommand(targetName string, offset float64) {
 
 	logInfo(fmt.Sprintf("Sniping %v at %v\n", targetName, droptime.Format("2006/01/02 15:04:05")))
 
-	time.Sleep(time.Until(droptime.Add(-time.Hour * 8))) // sleep until 8 hours before droptime
+	time.Sleep(time.Until(droptime.Add(-time.Minute * time.Duration(config.Accounts.StartAuth)))) // sleep until x minutes before droptime
 
 	// auth
 	for _, acc := range accounts {
@@ -98,6 +99,7 @@ func snipeCommand(targetName string, offset float64) {
 		}
 
 		logInfo(fmt.Sprintf("Acc Type: %v | Bearer: %v", acc.Type, censor(acc.Bearer, 260)))
+		time.Sleep(time.Second * time.Duration(config.Accounts.AuthDelay))
 	}
 
 	fmt.Print("\n")
@@ -109,11 +111,11 @@ func snipeCommand(targetName string, offset float64) {
 	var resps []mcgo.NameChangeReturn
 
 	for time.Now().Before(changeTime.Add(-time.Second * 40)) {
-		color.Printf("sniping in <fg=blue>%vs</>       \r", time.Until(droptime).Round(time.Second).Seconds())
+		color.Printf("sniping in <fg=blue>%vs</>       \r", math.Floor(time.Until(droptime).Seconds()))
 		time.Sleep(time.Second * 1)
 	}
 
-	fmt.Println("\nstarting...")
+	fmt.Println("\nstarting in 40s...")
 
 	// snipe
 	for _, acc := range accounts {
@@ -168,4 +170,9 @@ func snipeCommand(targetName string, offset float64) {
 
 func pingCommand() {
 	logInfo("Coming soon™")
+}
+
+func offsetTestCommand() {
+	logInfo("I recommend starting with an offset of ~50 and going from there. You want your 403 request responsese to be as close to ~0.0.")
+	logInfo("200 requests will always .1 seconds later than 403 requests.")
 }

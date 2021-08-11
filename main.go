@@ -51,6 +51,15 @@ func main() {
 					return nil
 				},
 			},
+			{
+				Name:    "offset-test",
+				Aliases: []string{"ot", "test", "delay", "offset"},
+				Usage:   "show information on offset",
+				Action: func(c *cli.Context) error {
+					offsetTestCommand()
+					return nil
+				},
+			},
 		},
 	}
 
